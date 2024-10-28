@@ -1,0 +1,63 @@
+# .github/workflows/weekly_script.yml
+
+name: Weekly Two_Solar Bot
+
+on:
+  schedule:
+    # Runs at 00:00 on Sunday
+    - cron: "0 0 * * SUN"
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    env:
+      TWO_SOLAR_URL: ${{ secrets.TWO_SOLAR_URL }}
+      TWO_SOLAR_USERNAME: ${{ secrets.TWO_SOLAR_USERNAME }}
+      TWO_SOLAR_PASSWORD: ${{ secrets.TWO_SOLAR_PASSWORD }}
+      SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
+      SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
+      SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+      SNOWFLAKE_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+      SNOWFLAKE_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
+      SNOWFLAKE_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
+      SNOWFLAKE_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11.7" # Specify your Python version
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install Google Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget unzip
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo apt install -y ./google-chrome-stable_current_amd64.deb
+          rm google-chrome-stable_current_amd64.deb
+
+      - name: Set up ChromeDriver
+        uses: selenium-actions/setup-chromedriver@v1
+        with:
+          chrome-version: "latest" # Adjust if necessary
+
+      - name: Run Python Script
+        run: |
+          python automated_offer_selection.py
+
+      - name: Upload Logs (Optional)
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: two_solar_bot-log
+          path: two_solar_bot.log
