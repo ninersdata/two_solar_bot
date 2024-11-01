@@ -36,7 +36,7 @@ logger = logging.getLogger(__name__)
 #-----------------------------------------------------------
 def initialize_driver():
     chrome_options = Options()
-    # chrome_options.add_argument("--headless=new")  # Use headless mode
+    chrome_options.add_argument("--headless=new")  # Use headless mode
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument('--mute-audio')
