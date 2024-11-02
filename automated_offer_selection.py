@@ -212,7 +212,7 @@ def main():
                 AND c.status_description NOT ILIKE '%lead%'
                 AND a.fk_offer_id IS NULL
                 AND b.date_request_created > '2024-06-01'
-            LIMIT 100
+            LIMIT 50
             """
             df = pd.read_sql(query, conn)
             conn.close()
