@@ -211,7 +211,7 @@ def main():
                 c.status_description ILIKE '%afkeur%'
                 AND c.status_description NOT ILIKE '%lead%'
                 AND a.fk_offer_id IS NULL
-                AND b.date_request_created > '2024-06-01'
+                AND b.date_request_created > '2024-11-01'
             LIMIT 50
             """
             df = pd.read_sql(query, conn)
