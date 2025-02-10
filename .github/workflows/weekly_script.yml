@@ -55,7 +55,8 @@ jobs:
 
       - name: Upload Logs (Optional)
         if: always()
-        uses: actions/upload-artifact@v4  # Updated to v4
+        uses: actions/upload-artifact@v4.6.0  # Specify the latest stable version
         with:
           name: two_solar_bot-log
           path: two_solar_bot.log
+          include-hidden-files: true # Include hidden files if necessary, remove this line if not needed
